@@ -1,0 +1,177 @@
+<header></header>
+<div class="inside_header" style="margin-top: 8px !important;">
+  <!--<div class="well">-->
+  <a class="logo" href="{{config.INSIDE_HEADER_LINK}}" target="_blank">
+      <table style="width: 100% !important;">
+          <tr>
+              <td style="float: left !important;">
+                  <img src="{{config.INSIDE_HEADER_IMAGE_LEFT}}" alt="logo" />
+              </td>
+              <td style="float: right !important;">
+                  <img src="{{config.INSIDE_HEADER_IMAGE_RIGHT}}" alt="logo" />
+              </td>
+          </tr>
+      </table>
+  </a>
+</div>
+<header style="margin: 60px 0 0 0 !important;"></header>
+
+
+
+
+<div id="store" class="content col-md-12" style="padding-top: 0px !important;overflow: hidden;">
+    <div class="container">
+        <div class="text-center">
+            <div class="col-md-12 store_container">
+                <div class="content-store col-md-5">
+                    <a (click)="callRoute('/cart')" title="proceed to shopping cart" class="pointer">
+                        <b>{{cartService.getTotalCount(null)}}</b> items, <b>{{cartService.getTotalPrice(null) | currency:'USD':true:'1.0-2'}}</b>
+                        <div style="display:inline !important;">
+                            <span class="btn btn-xs btn-split hvr-pulse">proceed to <img class="img-split" src="{{config.APP_IMAGES}}/cart.png" /></span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="tabs-menu col-md-5" style="white-space:nowrap !important;">
+                    <ul class="cbp-vm-options">
+                        <li *ngFor="let section of sections">
+                            <a class="cbp-vm-icon cbp-vm-grid {{section.class}}" [ngClass]="{cbpvmselected : isSelected(section)}" (click)="updateDisplay(section)">{{section.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="col-md-12 store_button_top">
+                <!-- Start Slide Button Pager -->
+                <table style="float:right;">
+                    <tr><td>
+                        <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                            <li [ngClass]="{disabled:pager.currentPage === 1}">
+                                <a (click)="setPage(1)">First</a>
+                            </li>
+                            <li [ngClass]="{disabled:pager.currentPage === 1}">
+                                <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+                            </li>
+                            <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                                <a (click)="setPage(page)">{{page}}</a>
+                            </li>
+                            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                                <a (click)="setPage(pager.currentPage + 1)">Next</a>
+                            </li>
+                            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                                <a (click)="setPage(pager.totalPages)">Last</a>
+                            </li>
+                        </ul>
+                    </td></tr>
+                </table>
+                <!-- End Slide Button Pager -->
+
+                <!-- Start Search TextBox -->
+                <div style="width: 300px !important;padding-bottom: 12px !important;">
+                    <!--<input type="text" [(ngModel)]="query" (change)="search('productname')" class="searchbox" placeholder="Search">-->
+                    <input #searchInput type="text" (change)="search(searchInput.value)" class="searchbox" placeholder="Search" />
+                </div>
+                <!-- End Start Search TextBox -->
+
+                <!-- Start Filter Buttons -->
+                <div class="filter-button-top">
+                    <button class="btn flr-top-first" (click)="filterCategory('categoryname','')">All</button>
+                </div>
+                <div *ngFor="let q of prods | unique: 'categoryname'" class="filter-button-top">
+                    <button class="btn flr-top" (click)="filterCategory('categoryname', q.categoryname)">{{q.categoryname}}</button>
+                </div>
+                <!-- End Start Filter Buttons -->
+            </div>
+
+            <div class="clear" style="height: 4px !important;"></div>
+
+            <div id="cbp-vm" class="cbp-vm-switcher" [ngClass]="{'activegrid': !isActive, '': isActive}">
+                <ul id="product" class="nav-pills nav-stacked rectangle-list">
+
+                    <li *ngFor="let item of pagedItems" style="padding-bottom: 32px !important;" class="store_pill {{config.AN_STORE_PILL}}">
+                        <div class="store_img_video {{config.AN_STORE_IMG_VIDEO}}">
+                            <div *ngIf="!item.showvideo">
+                                <a [routerLink]="['/product',item.sku]"><img src="{{config.PRODUCTS_FOLDER}}/{{item.imagename}}" style="display: block;height: 100%;max-height:200px" /></a>
+                            </div>
+                            <div *ngIf="item.showvideo">
+                                <div class="video">
+                                    <iframe id="yt_player" name="yt_player" [src]='item.videopage'
+                                    [attr.width]='_video_width' [attr.height]='_video_height'
+                                    marginheight="0" frameborder="0" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="store_block">
+                            <div class="store_header">
+                                <div [innerHTML]="item.header | safeHtml"></div>
+                            </div>
+                            <div class="store_shortdesc" [innerHTML]="item.shortdesc | safeHtml" style="padding: 0px 0px 6px 0px !important;"></div>
+                            <div style="white-space: nowrap !important;display:inline !important">
+                                <table style="width: 100% !important;">
+                                    <tr style="background-color: transparent !important;">
+                                        <td style="text-align: left !important;background-color: transparent !important;">
+                                            <span *ngIf="item.link.length > 0 && item.unitprice.toString() === '0'">
+                                                <a href="{{item.link}}" target="_blank"><span class="btn btn-x-blue">{{item.linktext}}</span></a>
+                                            </span>
+                                            <!--routerLink will handle 'href' whereas (click) doesn't-->
+                                            <a [hidden]="item.buynow" [routerLink]="['/product', item.sku]">
+                                                <div class="btn btn-x-blue">Info</div>
+                                            </a>
+                                            <a [hidden]="!item.buynow" (click)="cartService.buyNow(item)" autoscroll>
+                                                <div class="btn btn-x-danger">BuyNow</div>
+                                            </a>
+                                            <a [hidden]="item.buynow" *ngIf="item.unitprice > 0" (click)="cartService.addItem(item.sku, item.productname, item.unitprice, item.saleprice, item.showsale, 1, item.sh, item.faux)" autoscroll>
+                                                <div class="btn btn-x-blue">+</div>
+                                            </a>
+                                            <button *ngIf="cartService.getTotalCount(item.sku) > 0" class="btn btn-x-blue" type="button" style="text-align: left !important;"
+                                                [disabled]="item.quantity < 1"
+                                                (click)="cartService.addItem(item.sku, item.productname, item.unitprice, item.saleprice, item.showsale, -1, item.sh, item.faux)">-</button>
+                                        </td>
+                                        <td [hidden]="item.unitprice.toString() !== '0'"><img src="{{config.APP_IMAGES}}/free.png" /></td>
+                                        <td [hidden]="item.unitprice.toString() === '0'" class="content_price" style="margin: 0px 30px 0px 0px !important;text-align: right !important;float:right !important;">
+                                            <table style="vertical-align: top !important;background-color: transparent !important;">
+                                                <tr style="vertical-align: top !important;background-color: transparent !important;">
+                                                    <td>
+                                                        <img *ngIf="item.showsale" src="{{sale_image}}" />
+                                                        <span style="font-size: 1.0em !important;" [class.strikethrough]="item.showsale">{{item.unitprice | currency:'USD':true:'1.0-2'}}</span>
+                                                        <span *ngIf="item.showsale === false && cartService.getTotalCount(item.sku) > 0">
+                                                            <span class="glyphicon glyphicon-check"></span>{{cartService.getTotalCount(item.sku)}}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr [class.hide_saleprice]="item.showsale === false" style="vertical-align: top !important;background-color: transparent !important;">
+                                                    <td style="vertical-align: top !important;">
+                                                        <div *ngIf="item.showsale" style="font-size: 1.0em !important;vertical-align: top !important;margin: -8px !important;">
+                                                            {{item.saleprice | currency:'USD':true:'1.2-2'}}
+                                                            <span *ngIf="cartService.getTotalCount(item.sku) > 0">
+                                                                <span class="glyphicon glyphicon-check"></span>{{cartService.getTotalCount(item.sku)}}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="categoryname" style="margin:2px 5% 0 20px !important;float:right !important;">{{item.categoryname}}</div>
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!--routerLink will handle 'href' whereas (click) doesn't-->
+
+
+
+
+
+
+

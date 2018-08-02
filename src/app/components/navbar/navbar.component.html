@@ -1,0 +1,213 @@
+    <!-- Fixed navbar -->
+<nav class="navbar yamm navbar-custom navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </button>
+        <div style="display:inline !important;">
+            <a class="your-brand" href="{{config.NAVBAR_LOGO_LINK}}" target="_blank">
+                <img src="{{config.NAVBAR_LOGO_IMAGE}}" alt="logo" style="padding-top: 6px !important;" />
+            </a>
+        </div>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <!--An elegant way to set the active tab is to use [ngClass]="{ active: isActive('/store')}" in the view as shown below:-->
+        <li [ngClass]="{ active: isActive('/store')}" id="store"><a (click)="callRoute('/store')"><span class="glyphicon glyphicon-shopping-cart fa-lg"></span>&nbsp;Store</a></li>
+        <li [ngClass]="{ active: isActive('/cart')}" id="cart"><a (click)="callRoute('/cart')"><span class="glyphicon glyphicon-shopping-cart fa-lg"></span>&nbsp;Cart</a></li>
+        <li class="{ active: isActive('/admin-welcome')}" id="admin"><a href="admin.html#/admin"><span class="glyphicon glyphicon-edit fa-lg"></span>&nbsp;Admin</a></li>
+        <!-- <li (click)="showHideCarousel($event)"><a href="#"><span class="glyphicon glyphicon-transfer fa-lg"></span>&nbsp;Carousel </a></li> -->
+        <li (click)="changeBackgroundImage($event)"><a href="#"><span class="glyphicon glyphicon-wrench fa-lg"></span>&nbsp;BG </a></li>
+        <li class="dropdown">
+            <a (click)="onClick($event, 'themes')"><span class="glyphicon glyphicon-menu-hamburger"></span>&nbsp;NavBars<span class="caret"></span></a>
+            <ul class="dropdown-menu" [ngStyle]="{display:isOpenNavbarTheme ? 'block' : 'none'}" style="display:block;">
+                <li (click)="changeNavBar('navbar_gray_gradient')"><a href="#"><img src="./assets/ac_img/nb_gray.png" />&nbsp;Gray Gradient</a></li>
+                <li (click)="changeNavBar('navbar_dkred_gradient')"><a href="#"><img src="./assets/ac_img/nb_red.png" />&nbsp;Dk Red Gradient</a></li>
+                <li (click)="changeNavBar('navbar_blue_gradient')"><a href="#"><img src="./assets/ac_img/nb_blue.png" />&nbsp;Blue Gradient</a></li>
+                <li (click)="changeNavBar('navbar_brown_gradient')"><a href="#"><img src="./assets/ac_img/nb_brown.png" />&nbsp;Brown Gradient</a></li>
+                <li (click)="changeNavBar('navbar_black_gradient')"><a href="#"><img src="./assets/ac_img/nb_black.png" />&nbsp;Black Gradient</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="https://www.youtube.com/watch?v=HppJHKwCGCo" target="_blank"><span class="glyphicon glyphicon-camera"></span>&nbsp;Free Movies<span></span></a>
+        </li>
+        <li class="dropdown">
+            <a (click)="onClick($event, 'effects')" href="#"><span class="glyphicon glyphicon-menu-hamburger"></span>&nbsp;Effects<span class="caret"></span></a>
+            <div class="myaccordion_container dropdown-menu" [ngStyle]="{display:isOpenNavbarAnimation ? 'block' : 'none'}" style="display:block;">
+                <div style="width: 100%;">
+                    <table style="width: 100% !important;">
+                        <tbody>
+                            <tr>
+                                <td><span class="center-block">Apply to Item Selected Below:&nbsp;</span></td>
+                                <td style="padding:4px 0px 4px 0px !important;">
+                                    <a (click)="changeAnimation('')" class="btn btn-x-danger">Remove Effect from Selected Item</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0px 12px 0px !important;" colspan="2">
+                                    <div class="col-sm-12 radiogroup">
+                                        <div class="btn-group ng-isolate-scope" data-toggle="buttons-radio" id="idProperty" name="nameProperty" suffix="bootstrapSuffix">
+                                            <button type="button" id="store_img_video" class="btn btn-xs-success active" (click)="activate('store_img_video', $event)"><span>store img</span></button>
+                                            <button type="button" id="store_pill" class="btn btn-xs-success" (click)="activate('store_pill', $event)"><span>store pill</span></button>
+                                            <button type="button" id="carousel_img_video" class="btn btn-xs-success" (click)="activate('carousel_img_video', $event)"><span>carousel img</span></button>
+                                            <button type="button" id="carousel_pill" class="btn btn-xs-success" (click)="activate('carousel_pill', $event)"><span>carousel pill</span></button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="myaccordion_tab">
+                    <div class="myaccordion_tab_header btn btn-x-blue hvr-pulse" (click)="openTab('tab one')">Transitions</div>
+                    <div class="myaccordion_tab_content ng-hide" [hidden]='!showTransitions'>
+                        <a (click)="changeAnimation('hvr-grow')" class="hvr-grow">Grow</a>
+                        <a (click)="changeAnimation('hvr-shrink')" class="hvr-shrink">Shrink</a>
+                        <a (click)="changeAnimation('hvr-pulse')" class="hvr-pulse">Pulse</a>
+                        <a (click)="changeAnimation('hvr-pulse-grow')" class="hvr-pulse-grow">Pulse Grow</a>
+                        <a (click)="changeAnimation('hvr-pulse-shrink')" class="hvr-pulse-shrink">Pulse Shrink</a>
+                        <a (click)="changeAnimation('hvr-push')" class="hvr-push">Push</a>
+                        <a (click)="changeAnimation('hvr-pop')" class="hvr-pop">Pop</a>
+                        <a (click)="changeAnimation('hvr-bounce-in')" class="hvr-bounce-in">Bounce In</a>
+                        <a (click)="changeAnimation('hvr-bounce-out')" class="hvr-bounce-out">Bounce Out</a>
+                        <a (click)="changeAnimation('hvr-rotate')" class="hvr-rotate">Rotate</a>
+                        <a (click)="changeAnimation('hvr-grow-rotate')" class="hvr-grow-rotate">Grow Rotate</a>
+                        <a (click)="changeAnimation('hvr-float')" class="hvr-float">Float</a>
+                        <a (click)="changeAnimation('hvr-sink')" class="hvr-sink">Sink</a>
+                        <a (click)="changeAnimation('hvr-bob')" class="hvr-bob">Bob</a>
+                        <a (click)="changeAnimation('hvr-hang')" class="hvr-hang">Hang</a>
+                        <a (click)="changeAnimation('hvr-skew')" class="hvr-skew">Skew</a>
+                        <a (click)="changeAnimation('hvr-skew-forward')" class="hvr-skew-forward">Skew Forward</a>
+                        <a (click)="changeAnimation('hvr-skew-backward')" class="hvr-skew-backward">Skew Backward</a>
+                        <a (click)="changeAnimation('hvr-wobble-horizontal')" class="hvr-wobble-horizontal">Wobble Horizontal</a>
+                        <a (click)="changeAnimation('hvr-wobble-vertical')" class="hvr-wobble-vertical">Wobble Vertical</a>
+                        <a (click)="changeAnimation('hvr-wobble-to-bottom-right')" class="hvr-wobble-to-bottom-right">Wobble To Bottom Right</a>
+                        <a (click)="changeAnimation('hvr-wobble-to-top-right')" class="hvr-wobble-to-top-right">Wobble To Top Right</a>
+                        <a (click)="changeAnimation('hvr-wobble-top')" class="hvr-wobble-top">Wobble Top Edge</a>
+                        <a (click)="changeAnimation('hvr-wobble-bottom')" class="hvr-wobble-bottom">Wobble Bottom</a>
+                        <a (click)="changeAnimation('hvr-wobble-skew')" class="hvr-wobble-skew">Wobble Skew</a>
+                        <a (click)="changeAnimation('hvr-buzz')" class="hvr-buzz">Buzz</a>
+                        <a (click)="changeAnimation('hvr-buzz-out')" class="hvr-buzz-out">Buzz Out</a>
+                    </div>
+                </div>
+                <div class="myaccordion_tab">
+                    <div class="myaccordion_tab_header btn btn-x-blue hvr-bounce-to-right" (click)="openTab('tab two')">Background Transitions</div>
+                    <div class="myaccordion_tab_content ng-hide" [hidden]='!showBackgroundTransitions'>
+                        <a (click)="changeAnimation('hvr-fade')" class="hvr-fade">Fade</a>
+                        <a (click)="changeAnimation('hvr-back-pulse')" class="hvr-back-pulse">Back Pulse</a>
+                        <a (click)="changeAnimation('hvr-sweep-to-right')" class="hvr-sweep-to-right">Sweep To Right</a>
+                        <a (click)="changeAnimation('hvr-sweep-to-left')" class="hvr-sweep-to-left">Sweep To Left</a>
+                        <a (click)="changeAnimation('hvr-sweep-to-bottom')" class="hvr-sweep-to-bottom">Sweep To Bottom</a>
+                        <a (click)="changeAnimation('hvr-sweep-to-top')" class="hvr-sweep-to-top">Sweep To Top</a>
+                        <a (click)="changeAnimation('hvr-bounce-to-right')" class="hvr-bounce-to-right">Bounce To Right</a>
+                        <a (click)="changeAnimation('hvr-bounce-to-left')" class="hvr-bounce-to-left">Bounce To Left</a>
+                        <a (click)="changeAnimation('hvr-bounce-to-bottom')" class="hvr-bounce-to-bottom">Bounce To Bottom</a>
+                        <a (click)="changeAnimation('hvr-bounce-to-top')" class="hvr-bounce-to-top">Bounce To Top</a>
+                        <a (click)="changeAnimation('hvr-radial-out')" class="hvr-radial-out">Radial Out</a>
+                        <a (click)="changeAnimation('hvr-radial-in')" class="hvr-radial-in">Radial In</a>
+                        <a (click)="changeAnimation('hvr-rectangle-in')" class="hvr-rectangle-in">Rectangle In</a>
+                        <a (click)="changeAnimation('hvr-rectangle-out')" class="hvr-rectangle-out">Rectangle Out</a>
+                        <a (click)="changeAnimation('hvr-shutter-in-horizontal')" class="hvr-shutter-in-horizontal">Shutter In Horizontal</a>
+                        <a (click)="changeAnimation('hvr-shutter-out-horizontal')" class="hvr-shutter-out-horizontal">Shutter Out Horizontal</a>
+                        <a (click)="changeAnimation('hvr--shutter-in-vertical')" class="hvr-shutter-in-vertical">Shutter In Vertical</a>
+                        <a (click)="changeAnimation('hvr-shutter-out-vertical')" class="hvr-shutter-out-vertical">Shutter Out Vertical</a>
+                    </div>
+                </div>
+                <div class="myaccordion_tab">
+                    <div class="myaccordion_tab_header btn btn-x-blue hvr-ripple-in" (click)="openTab('tab three')">Border Transitions</div>
+                    <div class="myaccordion_tab_content ng-hide" [hidden]='!showBorderTransitions'>
+                        <a (click)="changeAnimation('hvr-border-fade')" class="hvr-border-fade">Border Fade</a>
+                        <a (click)="changeAnimation('hvr-hollow')" class="hvr-hollow">Hollow</a>
+                        <a (click)="changeAnimation('hvr-trim')" class="hvr-trim">Trim</a>
+                        <a (click)="changeAnimation('hvr-ripple-out')" class="hvr-ripple-out">Ripple Out</a>
+                        <a (click)="changeAnimation('hvr-ripple-in')" class="hvr-ripple-in">Ripple In</a>
+                        <a (click)="changeAnimation('hvr-outline-out')" class="hvr-outline-out">Outline Out</a>
+                        <a (click)="changeAnimation('hvr-outline-in')" class="hvr-outline-in">Outline In</a>
+                        <a (click)="changeAnimation('hvr-round-corners')" class="hvr-round-corners">Round Corners</a>
+                        <a (click)="changeAnimation('hvr-underline-from-left')" class="hvr-underline-from-left">Underline From Left</a>
+                        <a (click)="changeAnimation('hvr-underline-from-center')" class="hvr-underline-from-center">Underline From Center</a>
+                        <a (click)="changeAnimation('hvr-underline-from-right')" class="hvr-underline-from-right">Underline From Right</a>
+                        <a (click)="changeAnimation('hvr-reveal')" class="hvr-reveal">Reveal</a>
+                        <a (click)="changeAnimation('hvr-underline-reveal')" class="hvr-underline-reveal">Underline Reveal</a>
+                        <a (click)="changeAnimation('hvr-overline-reveal')" class="hvr-overline-reveal">Overline Reveal</a>
+                        <a (click)="changeAnimation('hvr-overline-from-left')" class="hvr-overline-from-left">Overline From Left</a>
+                        <a (click)="changeAnimation('hvr-overline-from-center')" class="hvr-overline-from-center">Overline From Center</a>
+                        <a (click)="changeAnimation('hvr-overline-from-right')" class="hvr-overline-from-right">Overline From Right</a>
+                    </div>
+                </div>
+                <div class="myaccordion_tab">
+                    <div class="myaccordion_tab_header btn btn-x-blue hvr-float-shadow" (click)="openTab('tab four')">Shadow and Glow Transitions</div>
+                    <div class="myaccordion_tab_content ng-hide" [hidden]='!showShadowGlowTransitions'>
+                        <a (click)="changeAnimation('hvr-shadow')" class="hvr-shadow">Shadow</a>
+                        <a (click)="changeAnimation('hvr-grow-shadow')" class="hvr-grow-shadow">Grow Shadow</a>
+                        <a (click)="changeAnimation('hvr-float-shadow')" class="hvr-float-shadow">Float Shadow</a>
+                        <a (click)="changeAnimation('hvr-glow')" class="hvr-glow">Glow</a>
+                        <a (click)="changeAnimation('hvr-shadow-radial')" class="hvr-shadow-radial">Shadow Radial</a>
+                        <a (click)="changeAnimation('hvr-box-shadow-outset')" class="hvr-box-shadow-outset">Box Shadow Outset</a>
+                        <a (click)="changeAnimation('hvr-box-shadow-inset')" class="hvr-box-shadow-inset">Box Shadow Inset</a>
+                    </div>
+                </div>
+                <div class="myaccordion_tab">
+                    <div class="myaccordion_tab_header btn btn-x-blue hvr-curl-top-right" (click)="openTab('tab five')">Curls</div>
+                    <div class="myaccordion_tab_content ng-hide" [hidden]='!showCurls'>
+                        <a (click)="changeAnimation('hvr-curl-top-left')" class="hvr-curl-top-left">Curl Top Left</a>
+                        <a (click)="changeAnimation('hvr-curl-top-right')" class="hvr-curl-top-right">Curl Top Right</a>
+                        <a (click)="changeAnimation('hvr-curl-bottom-right')" class="hvr-curl-bottom-right">Curl Bottom Right</a>
+                        <a (click)="changeAnimation('hvr-curl-bottom-left')" class="hvr-curl-bottom-left">Curl Bottom Left</a>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="dropdown">
+            <a (click)="onClick($event, 'video')" href="#"><span class="glyphicon glyphicon-film"></span>&nbsp;Video Sites<span class="caret"></span></a>
+            <ul class="dropdown-menu" [ngStyle]="{display:isOpenNavbarVideoSites ? 'block' : 'none'}" style="display:block;">
+                <li><a href="https://www.youtube.com/watch?v=YyZNIarRYSc" target="_blank"><img favicon url="'https://www.youtube.com'" description="''">&nbsp;<img src="./assets/ac_img/1_youtube.png"></a></li>
+                <li><a href="http://www.dailymotion.com/" target="_blank"><img favicon url="'http://www.dailymotion.com'" description="'DailyMotion'">&nbsp;<img src="./assets/ac_img/2_dailymotion.png"></a></li>
+                <li><a href="http://www.vimeo.com/" target="_blank"><img favicon url="'http://www.vimeo.com'" description="'Vimeo'">&nbsp;<img src="./assets/ac_img/3_vimeo.png"></a></li>
+                <li><a href="http://www.metacafe.com/" target="_blank"><img favicon url="'http://www.metacafe.com'" description="'Metacafe'">&nbsp;<img src="./assets/ac_img/4_metacafe.png"></a></li>
+                <li><a href="http://www.liveleak.com/" target="_blank"><img favicon url="'http://www.liveleak.com'" description="'Liveleak'">&nbsp;<img src="./assets/ac_img/5_liveleak.png"></a></li>
+                <li><a href="https://www.youtube.com/user/break" target="_blank"><img favicon url="'https://www.youtube.com/user/break'" description="'Break'">&nbsp;<img src="./assets/ac_img/6_break.png"></a></li>
+                <li><a href="http://www.ebaumsworld.com/" target="_blank"><img favicon url="'http://www.ebaumsworld.com'" description="'Ebaumsworld'">&nbsp;<img src="./assets/ac_img/7_ebaumsworld.png"></a></li>
+                <li><a href="http://www.collegehumor.com/" target="_blank"><img favicon url="'http://www.collegehumor.com'" description="'CollegeHumor'">&nbsp;<img src="./assets/ac_img/8_collegehumor.png"></a></li>
+                <li><a href="http://www.blinkx.com/" target="_blank"><img favicon url="'http://www.blinkx.com'" description="'Blinkx'">&nbsp;<img src="./assets/ac_img/9_blinkx.png"></a></li>
+                <li><a href="http://www.megavideo.to/" target="_blank"><img favicon url="'http://www.megavideo.com'" description="'MegaVideo'">&nbsp;<img src="./assets/ac_img/10_megavideo.png"></a></li>
+                <li><a href="http://www.youku.com/" target="_blank"><img favicon url="'http://www.youku.com'" description="'Youku'">&nbsp;<img src="./assets/ac_img/11_yklogo.png"></a></li>
+                <li><a href="http://www.bitlanders.com/" target="_blank"><img favicon url="'http://www.bitlanders.com'" description="'Bitlanders'">&nbsp;<img src="./assets/ac_img/12_bitlanders.png"></a></li>
+                <li><a href="https://vine.co/" target="_blank"><img favicon url="'https://vine.co/'" description="'Vine'">&nbsp;<img src="./assets/ac_img/13_vine.png"></a></li>
+            </ul>
+        </li>
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right" style="padding-right:22px !important;">
+        <li>
+            <!-- <a href="{{_durl}}" target="_blank">Distributor:&nbsp;{{_dname}}<span></span></a> -->
+            <a href="https://www.youtube.com/watch?v=HppJHKwCGCo" target="_blank"><span class="glyphicon glyphicon-camera"></span>&nbsp;Free Movies<span></span></a>
+        </li>
+        <!--<li>
+          <a routerLink="/cart"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a>
+        </li>-->
+        <!--Code below won't workunless you change fn calls to global-->
+        <!--<li>
+          <div *ngIf="cartService.getTotalCount(null) > 0" class="nav navbar-nav navbar-right" style="margin:6px 22px -6px 0px !important;">
+            <div class="thumbnail price">
+              <strong>Total Items: </strong><span class="badge">{{cartService.getTotalCount(null)}}</span> <strong>Total Price: {{cartService.getTotalPrice(null) | currency:'USD':true:'1.2-2'}}</strong>
+            </div>
+          </div>
+        </li>-->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+
+

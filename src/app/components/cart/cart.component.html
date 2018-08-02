@@ -1,0 +1,146 @@
+<div id="prod-top" class="prod-top-img col-md-12">
+    <div class="cart_header">
+        <p class="ztext-info">
+            We Offer You SAFE Order Processing Through PayPal Using Your Credit Card
+        </p><br />
+    </div> 
+</div>
+
+<!--currency:'USD':true:'1.2-2'-->
+<!--<div *ngFor="let item of cartService.items | orderBy:'sku', pure: false">-->
+<!--<div *ngFor="let item of (cartService.items | orderBy: 'productname')">
+<div [innerHTML] = "item.productname | safeHtml"></div>
+</div>-->
+ 
+<div class="container-fluid">
+    <div class="row-fluid content-backcolor">
+        <div class="col-md-8">
+
+            <!-- items -->
+            <table class="table tab-shop">
+
+                <!-- header -->
+                <tr class="well">
+                    <td><b>Item</b></td>
+                    <td class="tdCenter collapsible"><b>Quantity</b></td>
+                    <td class="tdRight collapsible"><b>Price</b></td>
+
+                    <!-- empty cart message -->
+                <!--<tr ng-hide="cartService.getTotalCount() > 0">-->
+                <tr [hidden]="cartService.getTotalCount(null) > 0">    
+                    <td class="tdCenter collapsible" colspan="3">
+                        Your cart is empty.
+                    </td>
+                </tr>
+
+                <!-- cart items -->
+                <tr [hidden]="cartService.getTotalCount(item.sku) < 1" *ngFor="let item of (cartService.items | orderBy: 'sku')">
+                    <td [innerHTML] = "item.productname | safeHtml"></td>
+                    <td class="tdCenter">
+                        <div class="input-append">
+                            <!-- use type=tel instead of to prevent spinners -->
+                            <input class="col-md-3 text-center quantity-prod" type="tel" readonly="readonly" style="text-align: right !important;border:none !important;border-width: 0 !important;"
+                                   [(ngModel)]="item.quantity"
+                                   (ngModelChange)="cartService.saveItems()" />
+                            <button class="btn btn-x-success" type="button" 
+                                    style="text-align: left !important;"  
+                                    (click)="cartService.addItem(item.sku, item.productname, item.unitprice, item.saleprice, item.showsale, +1, item.sh, item.faux)">+</button>
+                            <button class="btn btn-x-default" type="button" style="text-align: left !important;"
+                                    [disabled]="item.quantity < 1"
+                                    (click)="cartService.addItem(item.sku, item.productname, item.unitprice, item.saleprice, item.showsale, -1, item.sh, item.faux)">-</button>
+                        </div>
+                    </td>
+                    <td class="tdRight">{{item.unitprice * item.quantity | currency:'USD':true:'1.2-2'}}</td>
+                </tr>
+
+                <!-- footer -->
+                <tr class="well">
+                    <td colspan="3"><hr /></td>
+                </tr>
+                <tr class="well">
+                    <td><b>Sales Total</b></td>
+                    <td class="tdCenter"><b>{{cartService.getTotalCount(null)}}</b></td>
+                    <td class="tdRight"><b>{{cartService.getTotalPrice(null) | currency:'USD':true:'1.2-2'}}</b></td>
+                </tr>
+                <tr class="well">
+                    <td><b>Shipping / Handling</b></td>
+                    <td class="tdCenter"><b>{{cartService.getTotalCount(null)}}</b></td>
+                    <td class="tdRight"><b>{{cartService.getTotalSH(null) | currency:'USD':true:'1.2-2'}}</b></td>
+                </tr>
+                <tr class="well">
+                    <td><b>Total (Sales + SH)</b></td>
+                    <td class="tdCenter"><b>{{cartService.getTotalCount(null)}}</b></td>
+                    <td class="tdRight"><b>{{cartService.getTotalPrice(null) +cartService.getTotalSH(null) | currency:'USD':true:'1.2-2'}}</b></td>
+                </tr>
+            </table>
+
+        </div>
+
+
+        <!-- buttons -->
+        <div class="col-md-4">
+            <p class="text-info">
+                <button class="btn btn-block btn-default" (click)="callRoute('/store')">
+                    <span class="glyphicon glyphicon-chevron-left"></span>&nbsp;&nbsp;back to store</button>
+                <button class="btn btn-block btn-x-danger"
+                    (click)="cartService.clearItems()"
+                    [disabled]="cartService.getTotalCount(null) < 1">
+                    <span class="glyphicon glyphicon-trash white"></span>&nbsp;&nbsp;clear cart</button>
+            </p>
+
+            <br />
+
+            <p class="text-info" style="display:none;">
+                <span style="font-family: Arial, Helvetica, sans-serif; font-size: 1.4em; font-weight: bold">
+                    <span style="color: #FF0000;">You DO <span style="text-decoration: underline;">NOT</span> need a PayPal account to use PayPal.</span><br />
+                    You can pay with your own debit/credit card, bank account, or PayPal balance.
+                    </span><br /><br />
+            </p>
+
+            <!-- <p class="text-info">
+                <button class="btn btn-block btn-x-success"
+                        (click)="cartService.checkoutPayPal()"
+                        [disabled]="cartService.getTotalCount(null) < 1">
+                    <span class="glyphicon glyphicon-check"></span> &nbsp;&nbsp;check out using <strong><em>PayPal</em>&#174;</strong>
+                </button>
+                <button class="btn btn-block btn-x-success"
+                        (click)="cartService.checkoutGoogle()"
+                        [disabled]="cartService.getTotalCount(null) < 1">
+                    <span class="glyphicon glyphicon-check"></span> &nbsp;&nbsp; check out using <strong><em>Google</em>&#174;</strong>
+                </button>
+                <button class="btn btn-block btn-x-success"
+                        (click)="cartService.checkoutStripe()"
+                        [disabled]="cartService.getTotalCount(null) < 1">
+                    <span class="glyphicon glyphicon-check"></span> &nbsp;&nbsp; check out using <strong><em>Stripe</em>&#174;</strong>
+                </button>
+            </p> -->
+
+            <!-- Stripe needs a form to post to -->
+            <form class="form-stripe"></form>
+
+            <br />
+            <img src="{{config.APP_IMAGES}}/cc.png" />
+            <br /><br />
+
+            <p class="text-info">
+                <button id="orderNowButton" class="btn btn-block btn-link" 
+                        (click)="cartService.checkoutPayPal()"
+                        [disabled]="cartService.getTotalCount(null) < 1">
+                    <img src="{{config.APP_IMAGES}}/order_now.png" alt="checkout PayPal" style="border-width: 0px !important;outline:none !important;" />
+                </button>
+                <img src="{{config.APP_IMAGES}}/credentials.png" alt="checkout PayPal" style="border-width: 0px !important;outline:none !important;" />
+                
+                <!-- <button class="btn btn-block btn-link"
+                        (click)="cartService.checkoutGoogle()"
+                        [disabled]="cartService.getTotalCount(null) < 1">
+                    <img src="./assets/ac_img/ck_out_google_wallet.png" alt="checkoutGoogle" />
+                </button> -->
+                <!-- <button class="btn btn-block btn-link"
+                        (click)="cartService.checkoutStripe()"
+                        [disabled]="cartService.getTotalCount(null) < 1">
+                    <img src="./assets/ac_img/ck_out_stripe.png" alt="checkoutStripe" />
+                </button> -->
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,276 @@
+<div id="sidebar" auto-active class="scrollbar">
+    <ul id="nav" data-role="listview" data-inset="true" class="ui-listview zgeneral" onMouseOver="this.style.cursor='pointer'">
+        <li *ngFor="let product of allItems | orderBy:'sortorder'" onMouseOver="this.style.cursor='pointer'" 
+            class="sidebarlist" data-icon="false" data-role="listview" 
+            style="width:100%;display:block;">
+            <a class="rsslistfetch-link" (click)="loadProduct(product)">
+                <img class="rounded-img" src="{{config.PRODUCTS_FOLDER}}/{{product.imagename}}">
+                <div class="ellipsis">&nbsp;&nbsp;&nbsp;<span class="zebra1">{{ product.sku | limitTo:16 }}</span></div>
+                <div class="ellipsis">&nbsp;&nbsp;&nbsp;<span class="zebra2">{{ product.productname | html2Text | limitTo:20 }}</span></div>
+            </a>
+        </li>
+        <!--<div style="height:1200px;"></div>-->
+    </ul>
+</div>
+
+<div id="content">
+    <div>
+        <span class="carouselFilterClass" onMouseOver="this.style.cursor='pointer'" filterTextClass (click)="carouselFilter()">carousel</span> |
+        <span class="showvideoFilterClass" onMouseOver="this.style.cursor='pointer'" (click)="showvideoFilter()">video</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span onMouseOver="this.style.cursor='pointer'" (click)="setFilter('all')">all</span>
+        <span *ngFor="let product of prods | unique: 'categoryname'" style="white-space:nowrap !important;">
+            | <span onMouseOver="this.style.cursor='pointer'" (click)="setFilter(product.categoryname)">{{product.categoryname}}</span>
+        </span>
+    </div>
+    <div style="border-top: 1px solid #8f0222;margin:1px 0 2px 0 !important;"></div>
+
+
+
+    <!--///////////////////////////////////////////-->
+    <div *ngFor="let product of items">
+        <table cellpadding="0" cellspacing="0" style="width:100%;max-height:140px !important;">
+            <tr style="padding: 0 0 0 0;max-height:140px !important;">
+                <td style="vertical-align: top; text-align: left;width: 250px !important;max-width: 250px !important;">
+                    <div class="store_img_video" style="max-height: 140px !important;">
+                        <div *ngIf="!product.showvideo" style="width: 300px;">
+                            <img src="{{config.PRODUCTS_FOLDER}}/{{product.imagename}}" style="display: block;width:auto !important; height:150px !important;" />
+                        </div>
+                        <div *ngIf="product.showvideo">
+                            <div class="video">
+                                <iframe id="yt_player" name="yt_player" style="width: 300px !important;height:140px !important;"
+                                [src]="product.videopage" marginheight="0" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+                <td style="vertical-align: top; text-align: left;width: 250px !important;max-width: 250px !important;">
+                   
+                    <table style="margin: 0 0 0 0;padding: 0 0 0 0;">
+                        <tr>
+                            <td style="text-align:left;vertical-align:top !important;">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <button (click)="setImageDirectory();" id="btnSetImageDirectory" class="btn btn-x-blue" style="width:60px !important;min-height: 18px;margin:0px 0px 0px 0px !important;">Img Dir</button>
+                                        </td>
+                                        <td>&nbsp;
+                                            <input type="text" id="txtImageDir" name="txtImageDir" placeholder="enter sub directory in ac_products" style="width:200px !important;margin:0px 0 0 0;" />
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <div style="vertical-align: top; text-align: left;width: 280px !important;max-width: 280px !important;">
+                                    <table id="buttontable" style="width: 280px !important;">
+                                        <tr style="text-align:left !important;">
+                                            <td style="text-align:left !important;vertical-align:top;">
+                                                <button onclick="document.getElementById('fileToUpload').click(); return false;" class="btn btn-x-blue" 
+                                                style="max-width:60px !important;width:60px !important;">Image</button>
+                                                <!--// (change)="onChange($event, showFileNames)"-->
+                                                <input id="fileToUpload" type="file" multiple (change)="fileChange($event)" 
+                                                    style="width:50px;display: none;" class="fileinput-button input btn btn-x-blue" />
+                                            </td>
+                                            <td style="text-align:left !important;vertical-align:top;">
+                                                <input #showFileNames />
+                                                <!--<div *ngIf="file" style="white-space:nowrap !important;">
+                                                    <span style="text-align:left !important;">{{file.webkitRelativePath || file.name}}</span>
+                                                    (<span [ngSwitch]="file.size > 1024*1024" style="text-align:left !important;">
+                                                        <span *ngSwitchCase="true">{{file.size / 1024 / 1024 | number | number : '1.2-2'}} MB</span>
+                                                        <span *ngSwitchDefault>{{file.size / 1024 | number | number : '1.2-2'}} kB</span>
+                                                    </span>)
+                                                </div>-->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left !important;vertical-align:text-top;white-space:nowrap !important;margin: 0 0 0 0;">
+                                                <button (click)="uploadFile()" class="btn btn-x-blue" style="width:60px !important;">Upload</button>
+                                            </td>
+                                            <td style="text-align:left !important;vertical-align:text-top;white-space:nowrap !important;margin: 0 0 0 0;">
+                                                PROGRESS
+                                                <!--<div *ngIf="files.length > 0">
+                                                    <div *ngIf="progressVisible">
+                                                        <div class="percent">{{progress}}%</div>
+                                                        <div class="progress-bar">
+                                                            <div class="uploaded" style="width: progress+'%'"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>-->
+                                            </td>
+                                            <!--<td style="text-align:left !important;vertical-align:top;">
+                                                <div id="dropbox" class="dropbox" ng-class="dropClass" style="display: none"><span>{{dropText}}</span></div>
+                                            </td>
+                                            <td></td>-->
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div style="height: 10px;"></div>
+                                <table>
+                                    <tr>
+                                        <td style="padding-right:8px;vertical-align:top;">video<br />
+                                            <div style="height: 8px !important;"></div>
+                                            <input type="checkbox" id="showvideo" [(ngModel)]="product.showvideo" />
+                                        </td>
+                                        <td style="padding-right:2px;vertical-align:middle;width: 120px !important;">videoid<br />
+                                            <input [(ngModel)]="product.videoid" value="{{ product.videoid }}" type="text" id="videoid" name="videoid" style="width: 120px !important;" />
+                                        </td>
+                                        <td style="padding-right:2px;vertical-align:middle;">
+                                            tubes<br />
+                                            <select name="repeatSelect" id="repeatSelect" [(ngModel)]="product.tube" class="drop-down">
+                                                <option *ngFor="let option of data.availableOptions" value="{{option.id}}">{{option.name}}</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td style="vertical-align: top; text-align: left;width:440px;">
+                    <div>
+                        <span>Store ID</span>
+                        <input id="storeid" name="storeid" type="text" 
+                            [(ngModel)]="product.storeid" value="{{ product.storeid }}" 
+                            style="color:red;width: 290px !important;" disabled />
+                    </div>
+                    <div>
+                        <span>Product ID</span>
+                        <input id="productid" name="productid" type="text" [(ngModel)]="product.productid" value="{{ product.productid }}" disabled style="color:red;width: 290px !important;margin:4px 0 8px 0 !important;" />
+                    </div>
+
+                    <div style="margin-bottom:-2px !important;">
+                        Discontinued <input type="checkbox" [(ngModel)]="product.discontinued" />
+                        &nbsp;&nbsp;&nbsp;Faux <input type="checkbox" [(ngModel)]="product.faux" />
+                    </div>
+                    <div style="height: 2px;"></div>
+                    <table>
+                        <tr>
+                            <td>
+                                <label style="margin-bottom:-4px !important;">
+                                    Image Name&nbsp;&nbsp;&nbsp;&nbsp;
+                                </label>
+                            </td>
+                            <td>
+                                <input type="text" id="txtImageName" name="imagename" [(ngModel)]="product.imagename" value="{{ product.imagename }}" style="width: 200px !important;" />
+                            </td>
+                            <td>&nbsp;&nbsp;  
+                                <a *ngIf="product.showvideo && product.tube === 'youtube'" target="_self" href="https://img.youtube.com/vi/{{product.videoid}}/hqdefault.jpg" download="">YouTube Image</a>
+                            </td>
+                        </tr>
+                    </table>
+                    <!--<div style="height: 4px;"></div>-->
+                </td>
+            </tr>
+        </table>
+    <!--</div>-->
+    <!--///////////////////////////////////////////-->
+
+    <div style="width:100%;margin: 2px 0 2px 0 !important;height:1px !important;background-color: #808080;"></div>
+
+    <table>
+        <tr>
+            <td>
+                <div><strong>SKU&nbsp;</strong><input type="text" id="sku" name="sku" [(ngModel)]="product.sku" value="{{ product.sku }}" style="width: 230px !important;" /></div>
+
+                <div style="height: 6px;"></div>
+                <div><strong>Category&nbsp;</strong><input type="text" id="categoryname" name="categoryname" [(ngModel)]="product.categoryname" value="{{ product.categoryname }}" style="width: 230px !important;" /></div>
+
+                <div style="height: 6px;"></div>
+                <div><strong>Unit Price&nbsp;</strong><input type="text" id="unitprice" name="unitprice" [(ngModel)]="product.unitprice" value="{{ product.unitprice }}" style="width: 230px !important;" /></div>
+
+                <div style="height: 6px;"></div>
+                <div><strong>Sale Price&nbsp;</strong><input type="text" id="saleprice" name="saleprice" [(ngModel)]="product.saleprice" value="{{ product.saleprice }}" style="width: 130px !important;" />&nbsp;&nbsp;<strong>Show Sale:</strong> <input type="checkbox" [(ngModel)]="product.showsale" /></div>
+
+                <div style="height: 6px;"></div>
+                <div><strong>S&H&nbsp;</strong><input type="text" id="sh" name="sh" [(ngModel)]="product.sh" value="{{ product.sh }}" style="width: 130px !important;" /></div>
+
+                <div style="display: block;padding:10px 0 0px 0 !important;">
+                    <label style="margin-bottom:-2px !important;">Product Name <span style="color:#d51414;">(html)</span>&nbsp;&nbsp;</label>
+                    <textarea id="productname" name="productname" [(ngModel)]="product.productname" class="editor1" source-mode-allowed style="max-width: 300px !important; height: 60px !important;"></textarea>
+                </div>
+                <div style="display: block;">
+                    <label style="margin-bottom:-2px !important;">
+                        Carousel Caption <span style="color:#d51414;padding-right:20px;">(html)</span>Show in Carousel: <input type="checkbox" [(ngModel)]="product.carousel" />
+                    </label>
+                    <textarea id="carousel_caption" name="carousel_caption" [(ngModel)]="product.carousel_caption" class="editor1" source-mode-allowed style="max-width: 300px !important; height: 60px !important;"></textarea>
+                </div>
+
+                <div style="height: 4px;"></div>
+
+                <button class="btn btn-x-blue" style="width:50px;" ng-click="update(product)">Save</button>
+                <button class="btn btn-x-blue" style="width:50px;" ng:click="new()">New</button>
+                <button class="btn btn-x-blue" style="width:60px;" ng:click="delete()">Delete</button>
+            </td>
+            <td style="min-width: 18px !important;"></td>
+            <td style="vertical-align: top !important;">
+                <table style="vertical-align: top !important;">
+                    <tr>
+                        <td><span><strong>Sort Order</strong>&nbsp;</span></td>
+                        <td style="padding-right:16px;">
+                            <input type="number" id="sortorder" name="sortorder" [(ngModel)]="product.sortorder" min="0" max="100" value="{{ product.sortorder }}" style="width: 70px !important;" />
+                        </td>
+                        <td style="font-weight:bold;padding-right:4px;vertical-align:top;">Units<br />in Stock</td>
+                        <td>
+                            <input type="number" id="unitsinstock" name="unitsinstock" [(ngModel)]="product.unitsinstock" value="{{ product.unitsinstock }}" style="width: 70px !important;" />
+                        </td>
+                    </tr>
+                    <tr style="height:4px !important;"></tr>
+                    <tr>
+                        <td><span><strong>On Order&nbsp;</strong></span></td>
+                        <td style="padding-right:16px;">
+                            <input type="number" id="unitsonorder" name="unitsonorder" [(ngModel)]="product.unitsonorder" value="{{ product.unitsonorder }}" style="width: 70px !important;" />
+                        </td>
+                        <td style="font-weight:bold;padding-right:4px;vertical-align:top;">Reorder<br />level</td>
+                        <td>
+                            <input type="number" id="reorderlevel" name="reorderlevel" [(ngModel)]="product.reorderlevel" value="{{ product.reorderlevel }}" style="width: 70px !important;" />
+                        </td>
+                    </tr>
+                    <tr style="height:4px !important;">
+                    <tr>
+                </table>
+                <div style="height: 4px;"></div>
+                <div class="expecteddate">
+                    <span><strong>Expected&nbsp;</strong></span>
+                    <input type="date" id="expecteddate" name="expecteddate" [(ngModel)]="product.expecteddate" placeholder="MM-dd-yyyy" />
+                </div>
+
+                <div style="height: 10px;"></div>
+                <div><span><strong>URL Link&nbsp;</strong></span><input type="text" id="link" name="link" [(ngModel)]="product.link" value="{{ product.link }}" style="width: 210px !important;" /></div>
+
+                <div style="height: 10px;"></div>
+                <div><span><strong>Link Text&nbsp;</strong></span><input type="text" id="linktext" name="linktext" [(ngModel)]="product.linktext" value="{{ product.linktext }}" style="width: 210px !important;" /></div>
+
+                <div style="height: 10px;"></div>
+                <div><span><strong>Image URL&nbsp;</strong></span><input type="text" id="imageurl" name="imageurl" [(ngModel)]="product.imageurl" value="{{ product.imageurl }}" style="width: 210px !important;" /></div>
+
+                <div style="height: 10px;"></div>
+                <label><strong>Notes</strong>&nbsp;&nbsp;</label>
+                <textarea id="notes" name="notes" [(ngModel)]="product.notes" data-type="text" height="40" style="width:280px;height:40px;word-wrap: break-word;word-break: break-word;">{{ product.notes }}</textarea>
+                <br />
+            </td>
+            <td style="min-width: 18px !important;"></td>
+            <td style="vertical-align: top !important;">
+                <label style="margin-bottom:-2px !important;">Header <span style="color:#d51414;">(html)</span>&nbsp;&nbsp;</label>
+                <textarea id="header" name="header" [(ngModel)]="product.header" class="editor1" source-mode-allowed style="width:520px;height:80px;"></textarea>
+
+                <div style="margin:12px 0 0 0 ;height: 10px;"></div>
+                <label style="margin-bottom:-2px !important;">Short Description <span style="color:#d51414;">(html)</span>&nbsp;&nbsp;</label>
+                <textarea id="shortdesc" name="shortdesc" [(ngModel)]="product.shortdesc" class="editor1" source-mode-allowed style="width:520px;height:80px;"></textarea>
+
+                <div style="margin:12px 0 0 0 ;height: 10px;"></div>
+                <label style="margin-bottom:-2px !important;">Description <span style="color:#d51414;">(html)</span>&nbsp;&nbsp;</label>
+                <textarea id="description" name="description" [(ngModel)]="product.description" class="editor1" source-mode-allowed style="width:520px;height:80px;"></textarea>
+
+                <!--<div ng-show="product.showvideo > 0">
+                    <div embed-video tube="product.tube" code="product.videoid"></div>
+                </div>-->
+            </td>
+        <tr> 
+    </table>
+
+
+ </div>
+ 
+</div>

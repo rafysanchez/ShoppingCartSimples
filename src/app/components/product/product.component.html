@@ -1,0 +1,248 @@
+<header></header>
+<div class="inside_header" style="margin-top: 8px !important;">
+    <!--<div class="well">-->
+    <a class="zzzlogo" href="{{config.INSIDE_HEADER_LINK}}" target="_blank">
+        <table style="width: 100% !important;">
+            <tr>
+                <td style="float: left !important;">
+                    <img src="{{config.INSIDE_HEADER_IMAGE_LEFT}}" alt="logo" />
+                </td>
+                <td style="float: right !important;">
+                    <img src="{{config.INSIDE_HEADER_IMAGE_RIGHT}}" alt="logo" />
+                </td>
+            </tr>
+        </table>
+    </a>
+</div>
+<header></header>
+
+<div class="wrapper" id="store" *ngFor="let product of prods">
+
+    <!-- <header class="main-head">The header</header> -->
+    
+    <div class="main-nav">
+        <div class="image_video_block">
+                <div *ngIf="!product.showvideo">
+                    <a [routerLink]="['/product',product.sku]"><img src="{{config.PRODUCTS_FOLDER}}/{{product.imagename}}" 
+                        alt="{{product.productname}}" style="padding-right:20px !important;" /></a>
+                </div>
+                <div *ngIf="product.showvideo" class="video_wrapper" style="padding-right:20px !important;">
+                    <div class="video">
+                        <iframe id="yt_player" name="yt_player" [src]='product.videopage' 
+                        [attr.width]='_video_width' [attr.height]='_video_height' 
+                        marginheight="0" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="content">
+        <span style="font-family:Arial Black;font-size:1.8em;font-weight:bold;" [innerHTML]="product.header | safeHtml"></span><br />
+        <p class="product_description" [innerHTML]="product.description | safeHtml"></p><br />
+        <div style="white-space: nowrap !important;display:inline !important">
+            <table style="width: 100% !important;font-size: 1.4em !important;">
+                <tr style="background-color: transparent !important;">
+                    <td style="text-align: left !important;background-color: transparent !important;">
+                        <span *ngIf="product.link.length > 0 && product.unitprice.toString() === '0'">
+                            <a href="{{product.link}}" target="_blank"><span class="btn btn-x-blue">{{product.linktext}}</span></a>
+                        </span>
+                        <!-- <a [routerLink]="['/product', product.sku]">
+                            <div class="btn btn-x-blue">Info</div>
+                        </a>
+                        <a *ngIf="product.unitprice > 0" (click)="cartService.addItem(product.sku, product.productname, product.unitprice, product.saleprice, product.showsale, 1, product.sh, product.faux)" autoscroll>
+                            <div class="btn btn-x-blue">+</div>
+                        </a>
+                        <button *ngIf="cartService.getTotalCount(product.sku) > 0" class="btn btn-x-blue" type="button" style="text-align: left !important;"
+                            [disabled]="product.quantity < 1"
+                            (click)="cartService.addItem(product.sku, product.productname, product.unitprice, product.saleprice, product.showsale, -1, product.sh, product.faux)">-</button>                                -->
+                    </td>
+                    <td [hidden]="product.unitprice.toString() !== '0'"><img src="{{config.APP_IMAGES}}/free.png" /></td>
+                    <td [hidden]="product.unitprice.toString() === '0'" class="content_price" style="margin: 0px 30px 0px 0px !important;text-align: right !important;float:right !important;"> 
+                        <table style="vertical-align: top !important;background-color: transparent !important;">
+                            <tr style="vertical-align: top !important;background-color: transparent !important;">
+                                <td>
+                                    <img *ngIf="product.showsale" src="{{sale_image}}" />
+                                    <span style="font-size: 1.0em !important;" [class.strikethrough]="product.showsale">{{product.unitprice | currency:'USD':true:'1.0-2'}}</span>
+                                    <span *ngIf="product.showsale === false && cartService.getTotalCount(product.sku) > 0">
+                                        <span class="glyphicon glyphicon-check"></span>{{cartService.getTotalCount(product.sku)}}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr [class.hide_saleprice]="product.showsale === false" style="vertical-align: top !important;background-color: transparent !important;">
+                                <td style="vertical-align: top !important;">
+                                    <div *ngIf="product.showsale" style="font-size: 1.0em !important;vertical-align: top !important;margin: -8px !important;">
+                                        {{product.saleprice | currency:'USD':true:'1.2-2'}}
+                                        <span *ngIf="cartService.getTotalCount(product.sku) > 0">
+                                            <span class="glyphicon glyphicon-check"></span>{{cartService.getTotalCount(product.sku)}}
+                                        </span>
+                                    </div>                                   
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row-fluid content-backcolor" style="padding-top: 12px !important;">
+            <div class="col-md-8">
+                <table class="table table-responsive" style="border-style: none !important;">
+                    <tr class="well">
+                        <td class="tdRight" colspan="3">
+                            <a (click)="callRoute('/cart')" class="cart-txt-color" 
+                                title="proceed to shopping cart" *ngIf="cartService.getTotalCount(null) > 0">
+                                <b>{{cartService.getTotalCount(null)}}</b> items, 
+                                <b>{{cartService.getTotalPrice(null) | currency:'USD':true:'1.0-2'}}</b> 
+                                <div style="display:inline !important;">
+                                    <span class="btn btn-xs btn-split">proceed to <img class="img-split" src="./assets/ac_img/cart.png" /></span>
+                                </div>
+                                <span class="txt-cart-prod" *ngIf="cartService.getTotalCount(product.sku) > 0"><br />
+                                <strong>this item is in the cart</strong></span>
+                                <span class="txt-cart-prod" *ngIf="cartService.getTotalCount(product.sku) < 1"><br />
+                                <strong>this item is NOT in the cart</strong></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdRight detail-img">
+                            </td>
+                        <td class="tdRight product_productname"><p [innerHTML]="product.productname | safeHtml"></p></td>
+                        <td class="tdCenter product_categoryname"><p [innerHTML]="product.categoryname | safeHtml"></p></td>
+                    </tr>
+                </table>
+            </div>
+            <div style="height: 32px !important;"></div>
+            <div class="col-md-4">
+                <button class="btn btn-block btn-success"
+                        (click)="cartService.addItem(product.sku, product.productname, product.unitprice, product.saleprice, product.showsale, 1, product.sh, product.faux)">
+                    <span class="glyphicon glyphicon-cart white"></span>&nbsp;&nbsp;add to cart
+                </button>
+                <button class="btn btn-block btn-danger"
+                        (click)="cartService.addItem(product.sku, product.productname, product.unitprice, product.saleprice, product.showsale, -10000, product.sh, product.faux)"
+                        [disabled]="cartService.getTotalCount(product.sku) < 1">
+                    <span class="glyphicon glyphicon-trash white"></span>&nbsp;&nbsp;remove from cart
+                </button>
+                <button class="btn btn-block"
+                        (click)="callRoute('/store')">
+                    <span class="glyphicon glyphicon-left"></span>&nbsp;&nbsp;back to store
+                </button>
+            </div>
+        </div>
+
+    </div> 
+    <footer class="main-footer"></footer>
+</div>
+
+<!-- <div id="store" *ngFor="let product of prods" class="content col-md-12" style="overflow: hidden;">
+
+    <div id="prod-top" class="prod-top-img col-md-12">
+        <div class="image_video_block">
+            <div *ngIf="!product.showvideo">
+                <a [routerLink]="['/product',product.sku]"><img src="{{config.PRODUCTS_FOLDER}}/{{product.imagename}}" 
+                  alt="{{product.productname}}" style="padding-right:20px !important;" /></a>
+            </div>
+            <div *ngIf="product.showvideo" class="video_wrapper" style="padding-right:20px !important;">
+                <div class="video">
+                    <iframe id="yt_player" name="yt_player" [src]='product.videopage' 
+                    [attr.width]='_video_width' [attr.height]='_video_height' 
+                    marginheight="0" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <span style="font-family:Arial Black;font-size:1.8em;font-weight:bold;" [innerHTML]="product.header | safeHtml"></span><br />
+            <p class="product_description" [innerHTML]="product.description | safeHtml"></p><br />
+
+            <div style="white-space: nowrap !important;display:inline !important">
+                <table style="width: 100% !important;">
+                    <tr style="background-color: transparent !important;">
+                        <td style="text-align: left !important;background-color: transparent !important;">
+                            <span *ngIf="product.link.length > 0 && product.unitprice.toString() === '0'">
+                                <a href="{{product.link}}" target="_blank"><span class="btn btn-x-blue">{{product.linktext}}</span></a>
+                            </span>
+                            <a [routerLink]="['/product', product.sku]">
+                                <div class="btn btn-x-blue">Info</div>
+                            </a>
+                            <a *ngIf="product.unitprice > 0" (click)="cartService.addItem(product.sku, product.productname, product.unitprice, product.saleprice, product.showsale, 1, product.sh, product.faux)" autoscroll>
+                                <div class="btn btn-x-blue">+</div>
+                            </a>
+                            <button *ngIf="cartService.getTotalCount(product.sku) > 0" class="btn btn-x-blue" type="button" style="text-align: left !important;"
+                                [disabled]="product.quantity < 1"
+                                (click)="cartService.addItem(product.sku, product.productname, product.unitprice, product.saleprice, product.showsale, -1, product.sh, product.faux)">-</button>                               
+                        </td>
+                        <td [hidden]="product.unitprice.toString() !== '0'"><img src="{{config.APP_IMAGES}}/free.png" /></td>
+                        <td [hidden]="product.unitprice.toString() === '0'" class="content_price" style="margin: 0px 30px 0px 0px !important;text-align: right !important;float:right !important;"> 
+                            <table style="vertical-align: top !important;background-color: transparent !important;">
+                                <tr style="vertical-align: top !important;background-color: transparent !important;">
+                                    <td>
+                                        <img *ngIf="product.showsale" src="{{sale_image}}" />
+                                        <span style="font-size: 1.0em !important;" [class.strikethrough]="product.showsale">{{product.unitprice | currency:'USD':true:'1.0-2'}}</span>
+                                        <span *ngIf="product.showsale === false && cartService.getTotalCount(product.sku) > 0">
+                                            <span class="glyphicon glyphicon-check"></span>{{cartService.getTotalCount(product.sku)}}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr [class.hide_saleprice]="product.showsale === false" style="vertical-align: top !important;background-color: transparent !important;">
+                                    <td style="vertical-align: top !important;">
+                                        <div *ngIf="product.showsale" style="font-size: 1.0em !important;vertical-align: top !important;margin: -8px !important;">
+                                            {{product.saleprice | currency:'USD':true:'1.2-2'}}
+                                            <span *ngIf="cartService.getTotalCount(product.sku) > 0">
+                                                <span class="glyphicon glyphicon-check"></span>{{cartService.getTotalCount(product.sku)}}
+                                            </span>
+                                        </div>                                   
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div class="container-fluid">
+        <div class="row-fluid content-backcolor">
+            <div class="col-md-8">
+                <table class="table table-bordered">
+                    <tr class="well">
+                        <td class="tdRight" colspan="3">
+                            <a (click)="callRoute('/cart')" class="cart-txt-color" 
+                                title="proceed to shopping cart" *ngIf="cartService.getTotalCount(null) > 0">
+                                <b>{{cartService.getTotalCount(null)}}</b> items, 
+                                <b>{{cartService.getTotalPrice(null) | currency:'USD':true:'1.0-2'}}</b> 
+                                <div style="display:inline !important;">
+                                    <span class="btn btn-xs btn-split">proceed to <img class="img-split" src="./assets/ac_img/cart.png" /></span>
+                                </div>
+                                <span class="txt-cart-prod" *ngIf="cartService.getTotalCount(product.sku) > 0"><br />
+                                <strong>this item is in the cart</strong></span>
+                                <span class="txt-cart-prod" *ngIf="cartService.getTotalCount(product.sku) < 1"><br />
+                                <strong>this item is NOT in the cart</strong></span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdRight detail-img">
+                          </td>
+                        <td class="tdRight product_productname"><p [innerHTML]="product.productname | safeHtml"></p></td>
+                        <td class="tdCenter product_categoryname"><p [innerHTML]="product.categoryname | safeHtml"></p></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-4">
+                <button class="btn btn-block btn-success"
+                        (click)="cartService.addItem(product.sku, product.productname, product.unitprice, product.saleprice, product.showsale, 1, product.sh, product.faux)">
+                    <span class="glyphicon glyphicon-cart white"></span>&nbsp;&nbsp;add to cart
+                </button>
+                <button class="btn btn-block btn-danger"
+                        (click)="cartService.addItem(product.sku, product.productname, product.unitprice, product.saleprice, product.showsale, -10000, product.sh, product.faux)"
+                        [disabled]="cartService.getTotalCount(product.sku) < 1">
+                   <span class="glyphicon glyphicon-trash white"></span>&nbsp;&nbsp;remove from cart
+                </button>
+                <button class="btn btn-block"
+                        (click)="callRoute('/store')">
+                    <span class="glyphicon glyphicon-left"></span>&nbsp;&nbsp;back to store
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div> -->
